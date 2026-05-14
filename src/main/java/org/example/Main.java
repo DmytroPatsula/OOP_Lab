@@ -1,4 +1,6 @@
 package org.example;
+import org.example.config.AppConfig;
+import org.example.ui.AppFacade;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 

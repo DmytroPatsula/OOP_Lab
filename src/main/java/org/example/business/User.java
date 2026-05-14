@@ -1,4 +1,4 @@
-package org.example;
+package org.example.business;
 
 public abstract class User {
     private final String name;

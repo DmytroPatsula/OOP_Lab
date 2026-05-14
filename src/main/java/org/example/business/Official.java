@@ -1,4 +1,6 @@
-package org.example;
+package org.example.business;
+
+import org.example.repository.UserRepository;
 
 import java.util.Scanner;
 

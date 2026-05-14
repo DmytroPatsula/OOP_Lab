@@ -1,8 +1,8 @@
-package org.example;
+package org.example.ui;
 
 import java.util.Scanner;
 
-public abstract class BaseMenu implements Menu{
+public abstract class BaseMenu implements Menu {
 
     @Override
     public void showMenu(Scanner sc) {

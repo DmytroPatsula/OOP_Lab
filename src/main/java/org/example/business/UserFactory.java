@@ -1,5 +1,6 @@
-package org.example;
+package org.example.business;
 
+import org.example.repository.UserRepository;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,5 +1,9 @@
-package org.example;
+package org.example.ui;
 
+import org.example.business.Citizen;
+import org.example.business.Official;
+import org.example.business.User;
+import org.example.repository.UserRepository;
 import org.springframework.stereotype.Component;
 import java.util.Comparator;
 import java.util.List;

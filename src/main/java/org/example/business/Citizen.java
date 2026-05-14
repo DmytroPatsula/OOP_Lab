@@ -1,4 +1,4 @@
-package org.example;
+package org.example.business;
 
 public class Citizen extends User {
     private String address;
@@ -56,13 +56,13 @@ public class Citizen extends User {
         return "Address: " + address + taxStatus;
     }
 
-    void monthSimulation(){
+    public void monthSimulation(){
         account.monthlyTax();
     }
 
 
 
-    void checkTax() {
+    public void checkTax() {
         if (currentDebt >0) {
             System.out.println(getName() + " You have a debt: " + currentDebt);
         } else {
@@ -70,7 +70,7 @@ public class Citizen extends User {
         }
     }
 
-    void payTax() {
+    public void payTax() {
         if (currentDebt <=0) {
             System.out.println("Already paid");
         } else {
@@ -78,7 +78,7 @@ public class Citizen extends User {
             System.out.println("Taxes are successfully paid");
         }
     }
-    void payTax(int amount) {
+    public void payTax(int amount) {
         if (currentDebt <=0) {
             System.out.println("Already paid");
         } else if (amount <= 0) {

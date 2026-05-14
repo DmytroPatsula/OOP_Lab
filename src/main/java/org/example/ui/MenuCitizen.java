@@ -1,8 +1,11 @@
-package org.example;
+package org.example.ui;
+
+import org.example.repository.UserRepository;
+import org.example.business.Citizen;
 
 import java.util.Scanner;
 
-public class MenuCitizen extends BaseMenu{
+public class MenuCitizen extends BaseMenu {
     private final Citizen citizen;
     private final UserRepository userRepository;
 

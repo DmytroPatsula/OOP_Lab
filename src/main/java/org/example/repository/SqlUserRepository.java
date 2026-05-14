@@ -1,5 +1,9 @@
-package org.example;
+package org.example.repository;
 
+import org.example.business.User;
+import org.example.business.Citizen;
+import org.example.business.Official;
+import org.example.business.UserFactory;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
@@ -7,7 +11,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 @Component
-public class SqlUserRepository implements UserRepository{
+public class SqlUserRepository implements UserRepository {
     private final UserFactory userFactory;
 
     public SqlUserRepository(UserFactory userFactory) {
@@ -69,7 +73,6 @@ public class SqlUserRepository implements UserRepository{
                 int currentDebt = rs.getInt("current_debt");
                 String department = rs.getString("department");
 
-                // Фабрика сама розбереться, кого створити!
                 return userFactory.createUser(role, name, id, address, monthlyDebt, currentDebt, department, this);
             }
         } catch (SQLException e) {

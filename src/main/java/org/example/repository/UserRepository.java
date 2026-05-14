@@ -1,4 +1,7 @@
-package org.example;
+package org.example.repository;
+
+import org.example.business.Citizen;
+import org.example.business.User;
 
 import java.util.List;
 

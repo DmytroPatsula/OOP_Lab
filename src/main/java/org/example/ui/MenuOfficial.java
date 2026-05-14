@@ -1,8 +1,10 @@
-package org.example;
+package org.example.ui;
+
+import org.example.business.Official;
 
 import java.util.Scanner;
 
-public class MenuOfficial extends BaseMenu{
+public class MenuOfficial extends BaseMenu {
     private final Official official;
 
     public MenuOfficial(Official official) {
