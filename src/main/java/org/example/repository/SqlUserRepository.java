@@ -28,28 +28,33 @@ public class SqlUserRepository implements UserRepository {
 
     @Override
     public void addUser(User user){
-        String sql = "INSERT INTO users (id, name, role, address, monthly_debt, department) VALUES (?, ?, ?, ?, ?, ?)";
+        String insertUser = "INSERT INTO users (id, name, role) VALUES (?, ?, ?)";
+        String insertCitizen = "INSERT INTO citizens (user_id, address, monthly_debt, current_debt) VALUES (?, ?, ?, ?)";
+        String insertOfficial = "INSERT INTO officials (user_id, department) VALUES (?, ?)";
 
-        try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setInt(1, user.getId());
-            pstmt.setString(2, user.getName());
-
-            if (user instanceof Citizen citizen) {
-                pstmt.setString(3, "CITIZEN");
-                pstmt.setString(4, citizen.getAddress());
-                pstmt.setInt(5, citizen.getMonthlyDebt());
-                pstmt.setNull(6, Types.VARCHAR);
-            } else if (user instanceof Official official) {
-                pstmt.setString(3, "OFFICIAL");
-                pstmt.setNull(4, Types.VARCHAR);
-                pstmt.setNull(5, Types.INTEGER);
-                pstmt.setString(6, official.getDepartment());
+        try (Connection conn = getConnection()) {
+            try (PreparedStatement pstmtUser = conn.prepareStatement(insertUser)) {
+                pstmtUser.setInt(1, user.getId());
+                pstmtUser.setString(2, user.getName());
+                pstmtUser.setString(3, (user instanceof Citizen) ? "CITIZEN" : "OFFICIAL");
+                pstmtUser.executeUpdate();
             }
 
-            pstmt.executeUpdate();
-
+            if (user instanceof Citizen citizen) {
+                try (PreparedStatement pstmtCit = conn.prepareStatement(insertCitizen)) {
+                    pstmtCit.setInt(1, citizen.getId());
+                    pstmtCit.setString(2, citizen.getAddress());
+                    pstmtCit.setInt(3, citizen.getMonthlyDebt());
+                    pstmtCit.setInt(4, citizen.getCurrentDebt());
+                    pstmtCit.executeUpdate();
+                }
+            } else if (user instanceof Official official) {
+                try (PreparedStatement pstmtOff = conn.prepareStatement(insertOfficial)) {
+                    pstmtOff.setInt(1, official.getId());
+                    pstmtOff.setString(2, official.getDepartment());
+                    pstmtOff.executeUpdate();
+                }
+            }
         } catch (SQLException e) {
             System.out.println("Помилка бази даних при додаванні: " + e.getMessage());
         }
@@ -57,7 +62,11 @@ public class SqlUserRepository implements UserRepository {
 
     @Override
     public User findUserById(int id){
-        String sql = "SELECT * FROM users WHERE id = ?";
+        String sql = "SELECT u.id, u.name, u.role, c.address, c.monthly_debt, c.current_debt, o.department " +
+                "FROM users u " +
+                "LEFT JOIN citizens c ON u.id = c.user_id " +
+                "LEFT JOIN officials o ON u.id = o.user_id " +
+                "WHERE u.id = ?";
 
         try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -81,6 +90,7 @@ public class SqlUserRepository implements UserRepository {
         return null;
     }
 
+    @Override
     public boolean ifExists(int id) {
         String sql = "SELECT 1 FROM users WHERE id = ?";
         try (Connection conn = getConnection();
@@ -113,7 +123,10 @@ public class SqlUserRepository implements UserRepository {
     @Override
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT * FROM users";
+        String sql = "SELECT u.id, u.name, u.role, c.address, c.monthly_debt, c.current_debt, o.department " +
+                "FROM users u " +
+                "LEFT JOIN citizens c ON u.id = c.user_id " +
+                "LEFT JOIN officials o ON u.id = o.user_id";
 
         try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -139,7 +152,7 @@ public class SqlUserRepository implements UserRepository {
 
     @Override
     public void updateCitizen(Citizen citizen) {
-        String sql = "UPDATE users SET current_debt = ?, address = ? WHERE id = ?";
+        String sql = "UPDATE citizens SET current_debt = ?, address = ? WHERE user_id = ?";
         try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
