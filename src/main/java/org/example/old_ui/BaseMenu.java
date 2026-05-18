@@ -1,4 +1,6 @@
-package org.example.ui;
+package org.example.old_ui;
+
+import org.example.old_ui.Menu;
 
 import java.util.Scanner;
 

@@ -1,15 +1,12 @@
 package org.example;
-import org.example.config.AppConfig;
-import org.example.ui.AppFacade;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
 public class Main {
     public static void main(String[] args) {
-        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-
-        AppFacade app = context.getBean(AppFacade.class);
-
-        app.start();
+        SpringApplication.run(Main.class, args);
+        //http://localhost:8080/swagger-ui/index.html
     }
 }
