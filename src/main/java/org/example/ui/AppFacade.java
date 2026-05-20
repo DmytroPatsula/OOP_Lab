@@ -2,6 +2,9 @@ package org.example.ui;
 
 import org.example.business.Citizen;
 import org.example.business.User;
+import org.example.business.strategy.FullPaymentStrategy;
+import org.example.business.strategy.PartialPaymentStrategy;
+import org.example.business.strategy.PaymentStrategy;
 import org.example.repository.UserRepository;
 import org.springframework.stereotype.Component;
 
@@ -35,9 +38,17 @@ public class AppFacade {
     public String payCitizenTax(int id, int amount) {
         User user = userRepository.findUserById(id);
         if (user instanceof Citizen citizen) {
-            citizen.payTax(amount);
+            PaymentStrategy strategy = (amount == 0)
+                    ? new FullPaymentStrategy()
+                    : new PartialPaymentStrategy();
+
+
+            strategy.processPayment(citizen, amount);
+
             userRepository.updateCitizen(citizen);
-            return "Tax operation completed for " + citizen.getName() + ". Current debt: " + citizen.getCurrentDebt();
+
+            return "Tax operation completed using " + strategy.getClass().getSimpleName()
+                    + ". Current debt: " + citizen.getCurrentDebt();
         }
         return "Error: Citizen not found or is an Official.";
     }
