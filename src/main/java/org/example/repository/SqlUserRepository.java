@@ -18,9 +18,9 @@ public class SqlUserRepository implements UserRepository {
         this.userFactory = userFactory;
     }
 
-    private static final String URL = "jdbc:mysql://localhost:3306/egov";
-    private static final String USER = "root";
-    private static final String PASSWORD = "PtsDYSQL1234";
+    private static final String URL = "jdbc:mysql://egov-mysql-db.mysql.database.azure.com:3306/egov?useSSL=true&requireSSL=true";
+    private static final String USER = "egovadmin";
+    private static final String PASSWORD = "E1234gov@pTSdy";
 
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);
